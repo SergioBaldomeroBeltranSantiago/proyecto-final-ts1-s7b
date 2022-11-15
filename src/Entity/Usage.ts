@@ -4,7 +4,7 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  ManyToOne,
+  OneToOne,
   OneToMany,
 } from 'typeorm';
 
@@ -19,9 +19,9 @@ export class Consumo {
   @Column()
   consumo: number;
 
-  @ManyToOne(() => Pago, (pago) => pago.id_consumo)
-  pago: Pago[];
+  @OneToOne(() => Pago)
+  pago: Pago;
 
-  @OneToMany(() => Cliente, (cliente) => cliente.consumos)
+  @OneToMany(() => Cliente, (cliente: Cliente) => cliente.consumos)
   id_cliente: Cliente;
 }

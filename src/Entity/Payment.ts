@@ -1,12 +1,19 @@
 import { Consumo } from './Usage';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity()
 export class Pago {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Consumo, (consumo) => consumo.pago)
+  @OneToOne(() => Consumo)
+  @JoinColumn()
   id_consumo: Consumo;
 
   @Column()

@@ -1,5 +1,5 @@
 import { Consumo } from './Usage';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class Cliente {
@@ -18,6 +18,9 @@ export class Cliente {
   @Column()
   domicilio: string;
 
-  @OneToMany(() => Consumo, (consumo) => consumo.id_cliente)
+  @Column()
+  fechaNacimiento: Date;
+
+  @OneToMany(() => Consumo, (consumo: Consumo) => consumo.id_cliente)
   consumos: Consumo[];
 }
