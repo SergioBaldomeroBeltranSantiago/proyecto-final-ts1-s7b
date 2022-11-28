@@ -4,6 +4,9 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PagoModule } from './API/Pago/pago.module';
+import { ConsumoService } from './API/Consumo/consumo.service';
+import { ConsumoController } from './consumo/consumo.controller';
+import { ConsumoModule } from './consumo/consumo.module';
 
 @Module({
   imports: [
@@ -13,8 +16,9 @@ import { PagoModule } from './API/Pago/pago.module';
     }),
     Connection,
     PagoModule,
+    ConsumoModule,
   ], //Faltan modulos de entidades
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, ConsumoController],
+  providers: [AppService, ConsumoService],
 })
 export class AppModule {}
