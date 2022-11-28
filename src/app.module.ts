@@ -5,8 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PagoModule } from './API/Pago/pago.module';
 import { ConsumoService } from './API/Consumo/consumo.service';
-import { ConsumoController } from './consumo/consumo.controller';
-import { ConsumoModule } from './consumo/consumo.module';
+import { ConsumoController } from './API/Consumo/consumo.controller';
+import { ConsumoModule } from './API/Consumo/consumo.module';
 
 @Module({
   imports: [
