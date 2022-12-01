@@ -8,9 +8,9 @@ import { Cliente } from 'src/Entity/Client';
 
 @Injectable()
 export class ConsumoService {
-    constructor(@InjectRepository(Consumo) private consumoEntity: Repository<Consumo>) { }
-    /*constructor(@InjectRepository(Consumo) private consumoEntity: Repository<Consumo>,
-        private clienteService: ClienteService) { }*/
+    //constructor(@InjectRepository(Consumo) private consumoEntity: Repository<Consumo>) { }
+    constructor(@InjectRepository(Consumo) private consumoEntity: Repository<Consumo>,
+        private clienteService: ClienteService) { }
 
     async crearConsumo(consumo: IConsumo) {
 
@@ -52,16 +52,19 @@ export class ConsumoService {
             }
         })
 
-        try{
+        /*try{
             console.log(ultimo[0].cliente);
         }
         catch{
 
-        }
+        }*/
         //Falta traducir el id del cliente en su nombre
 
-        return borde = "La ID del cliente que consumio mas Kw es: " + primero[0].id_cliente + 
-            ". La ID del cliente que consumio menos Kw es: " + ultimo[0].id_cliente + ".";
+        const clientePrimero = await this.clienteService.clienteUnico(primero[0].id_cliente)
+        const clienteUltimo = await this.clienteService.clienteUnico(ultimo[0].id_cliente)
+
+        return borde = "El cliente que consumio mas Kw es: " + clientePrimero.nombre + 
+            ". \nLa ID del cliente que consumio menos Kw es: " + clienteUltimo.nombre + ".";
     }
 
     async reporteUsuario(param : number){

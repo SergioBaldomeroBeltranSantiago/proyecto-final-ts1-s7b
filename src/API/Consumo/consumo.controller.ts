@@ -5,7 +5,7 @@ import { ClienteService } from '../Cliente/cliente.service';
 
 @Controller('consumo')
 export class ConsumoController {
-    constructor(private consumoService: ConsumoService/*, private clienteService: ClienteService*/) {}
+    constructor(private consumoService: ConsumoService) {}
 
     @Post('/new')
     Create(@Body() params: IConsumo): boolean {
@@ -18,11 +18,13 @@ export class ConsumoController {
         }
     }
 
+    //Reporte general de todos los consumos
     @Get('/reporte_Consumos')
     allConsumos() {
         return this.consumoService.getAll()
     }
 
+    //Reporte el cual indica que usuario consumio mas Kw y quien consumio menos Kw
     @Get('/reporte_mas_menos')
     bordes(){
         try {
@@ -33,6 +35,7 @@ export class ConsumoController {
         }
     }
 
+    //Reporte de detalles de consumo por cliente. 
     @Get('/reporte/:id')
     consumoUsuario(@Param('id') param:number){
         try {
