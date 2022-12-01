@@ -8,24 +8,17 @@ import { Cliente } from 'src/Entity/Client';
 
 @Injectable()
 export class ConsumoService {
-    constructor(@InjectRepository(Consumo) private consumoEntity: Repository<Consumo>,
-        private clienteService: ClienteService) { }
+    constructor(@InjectRepository(Consumo) private consumoEntity: Repository<Consumo>) { }
+    /*constructor(@InjectRepository(Consumo) private consumoEntity: Repository<Consumo>,
+        private clienteService: ClienteService) { }*/
 
     async crearConsumo(consumo: IConsumo) {
 
-        const usuario: Cliente = await this.clienteService.getByID(consumo.id_cliente);
-
-        if (usuario.id > 0) {
-
-            await this.consumoEntity.insert({
-                fecha: consumo.fecha,
-                consumo: consumo.consumo,
-                id_cliente: usuario.id
-            });
-        }
-        else {
-            return "El cliente no existe"
-        }
+        await this.consumoEntity.insert({
+            fecha: consumo.fecha, //"2022-11-30"
+            consumo: consumo.consumo,
+            id_cliente: consumo.id_cliente    
+        });
 
     }
 
@@ -41,21 +34,57 @@ export class ConsumoService {
         return await this.consumoEntity.find();
     }
 
+    //Registro de mas y menos consumo de Kw
     async getBordes() {
         let borde:string = "";
 
-        borde = await this.consumoEntity.find({
+        const primero = await this.consumoEntity.find({
             order: {
                 consumo: "ASC"
             }
         })
 
-        borde = borde + await this.consumoEntity.find({
+        //console.log(primero);
+
+        const ultimo = await this.consumoEntity.find({
             order: {
                 consumo: "DESC"
             }
         })
 
-        return borde;
+        try{
+            console.log(ultimo[0].cliente);
+        }
+        catch{
+
+        }
+        //Falta traducir el id del cliente en su nombre
+
+        return borde = "La ID del cliente que consumio mas Kw es: " + primero[0].id_cliente + 
+            ". La ID del cliente que consumio menos Kw es: " + ultimo[0].id_cliente + ".";
+    }
+
+    async reporteUsuario(param : number){
+        const lista = await this.consumoEntity.find({
+            where: {
+                id_cliente: param
+            }
+        })
+
+        //console.log(lista)
+
+        return lista;
+    }
+
+    async consumoUnico(param : number){
+        const lista = await this.consumoEntity.find({
+            where: {
+                id : param
+            }
+        })
+
+        //console.log(lista)
+
+        return lista[0];
     }
 }

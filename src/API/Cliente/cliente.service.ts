@@ -29,4 +29,13 @@ export class ClienteService {
   async getAll() {
     return await this.clienteEntity.find();
   }
+
+  async clienteUnico(param : number){
+    const lista = await this.clienteEntity.find({
+        where: {
+            id : param
+        }
+    })
+    return lista[0];
+}
 }

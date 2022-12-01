@@ -13,12 +13,15 @@ export class Pago {
   id: number;
 
   @OneToOne(() => Consumo)
-  @JoinColumn()
-  id_consumo: Consumo;
+  @JoinColumn({name: 'id_consumo'})
+  consumo: Consumo;
 
   @Column()
   fecha: Date;
 
   @Column()
   total: number;
+
+  @Column({name: "id_consumo"})
+  id_consumo: number;
 }

@@ -1,10 +1,11 @@
 import { IConsumo } from './../../Model/Consumo';
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param } from '@nestjs/common';
 import { ConsumoService } from './consumo.service';
+import { ClienteService } from '../Cliente/cliente.service';
 
 @Controller('consumo')
 export class ConsumoController {
-    constructor(private consumoService: ConsumoService) {}
+    constructor(private consumoService: ConsumoService/*, private clienteService: ClienteService*/) {}
 
     @Post('/new')
     Create(@Body() params: IConsumo): boolean {
@@ -17,15 +18,25 @@ export class ConsumoController {
         }
     }
 
-    @Get('/all')
+    @Get('/reporte_Consumos')
     allConsumos() {
         return this.consumoService.getAll()
     }
 
-    @Get('/mas_menos')
+    @Get('/reporte_mas_menos')
     bordes(){
         try {
-            this.consumoService.getBordes()
+            return this.consumoService.getBordes()
+        } catch (error) {
+            console.log({ error })
+            return false
+        }
+    }
+
+    @Get('/reporte/:id')
+    consumoUsuario(@Param('id') param:number){
+        try {
+            return this.consumoService.reporteUsuario(param)
         } catch (error) {
             console.log({ error })
             return false

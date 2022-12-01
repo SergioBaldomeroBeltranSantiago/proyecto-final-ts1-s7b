@@ -1,3 +1,4 @@
+import { ClienteService } from './../Cliente/cliente.service';
 import { ConsumoService } from './../Consumo/consumo.service';
 import { Consumo } from './../../Entity/Usage';
 import { IPago } from './../../Model/Pago';
@@ -9,9 +10,14 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class PagoService {
   constructor(@InjectRepository(Pago) private pagoEntity: Repository<Pago>,
-  private consumoService: ConsumoService) {}
+  private consumoService : ConsumoService,
+  private clienteService : ClienteService) { }
+  /*constructor(@InjectRepository(Pago) private pagoEntity: Repository<Pago>,
+  private consumoService: ConsumoService) {}*/
 
-  async crearPago(pago: IPago) {
+  /*async crearPago(pago: IPago) {
+
+    const date = new Date();
 
     const consumos: Consumo = await this.consumoService.getByID(pago.id_consumo);
 
@@ -45,5 +51,44 @@ export class PagoService {
         else{
             return "El cliente no existe"
         }
+  }*/
+
+  async crearPago(pago: IPago) {
+
+    let costos = 0
+    let date : Date = new Date();
+
+    const consumo = await this.consumoService.consumoUnico(pago.id_consumo)
+    const cliente = await this.clienteService.clienteUnico(consumo.id_cliente)
+
+    //console.log(await this.consumoService.consumoUnico(pago.id_consumo));
+
+    if (consumo.consumo>= 1 && consumo.consumo <= 100) {
+      costos = consumo.consumo * 150;
+    }
+    else if (consumo.consumo > 100 && consumo.consumo <= 300) {
+      costos = consumo.consumo * 170;
+    }
+    else if (consumo.consumo > 300) {
+      costos = consumo.consumo * 190;
+    }
+
+    let edad:number = Number(date.getFullYear() - Number(cliente.fechaNacimiento.getFullYear()));
+
+    if (edad > 50){
+      costos = costos/1.10;
+    }
+
+    //console.log(costos)
+    //console.log(cliente.fechaNacimiento.getFullYear())
+    console.log(Number(date.getFullYear() - Number(cliente.fechaNacimiento.getFullYear())))
+
+
+    await this.pagoEntity.insert({
+      fecha: date,
+      total: costos,
+      id_consumo: pago.id_consumo
+    });
+
   }
 }

@@ -12,16 +12,7 @@ import { ConsumoController } from './API/Consumo/consumo.controller';
 import { ConsumoModule } from './API/Consumo/consumo.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      envFilePath:
-        process.env.NODE_ENV === 'docker' ? '.docker.env' : '.local.env',
-    }),
-    Connection,
-    PagoModule,
-    ConsumoModule,
-    ClienteModule
-  ], //Faltan modulos de entidades
+  imports: [ConfigModule.forRoot({envFilePath : process.env.NODE_ENV === 'docker' ? '.env' : '.env.local'}),Connection, PagoModule, ConsumoModule, ClienteModule],
   controllers: [AppController, ConsumoController, ClienteController],
   providers: [AppService, ConsumoService, ClienteService],
 })
