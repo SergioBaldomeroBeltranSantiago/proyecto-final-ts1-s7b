@@ -3,7 +3,7 @@ import { ConsumoService } from './../Consumo/consumo.service';
 import { Consumo } from './../../Entity/Usage';
 import { IPago } from './../../Model/Pago';
 import { Pago } from './../../Entity/Payment';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Get } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -102,14 +102,40 @@ export class PagoService {
 
   async pagados() {
 
-    console.log()
+      //console.log(await this.consumoService.pagados())
+
+
+    const pagadores = await this.consumoService.pagados()
+
+    let listaPagados : string = "";
+
+    for (let index = 0; index < pagadores.length; index++) {
+      listaPagados += (" ID de cliente: " + pagadores[index].id_cliente + ", con ID de consumo: " + pagadores[index].id + " e ID de pago: " + pagadores[index].pagoid + ". \n");
+    }
+    return listaPagados
+
+
+    /*const users = await this.pagoEntity.find({
+      relations: {
+          consumo : false
+      }
+    })*/
+
+    //console.log(users);
 
     //return list;
   }
 
   async deuda() {
 
-    console.log()
+    const deudores = await this.consumoService.nopagados().finally()
+
+    let listaDeudores : string = "";
+
+    for (let index = 0; index < deudores.length; index++) {
+      listaDeudores += (" ID de cliente: " + deudores[index].id_cliente + ", con ID de consumo: " + deudores[index].id + ". \n");
+    }
+    return listaDeudores
 
     //return list;
   }

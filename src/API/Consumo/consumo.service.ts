@@ -4,7 +4,6 @@ import { Consumo } from 'src/Entity/Usage';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IConsumo } from 'src/Model/Consumo';
-import { Cliente } from 'src/Entity/Client';
 
 @Injectable()
 export class ConsumoService {
@@ -17,7 +16,7 @@ export class ConsumoService {
         await this.consumoEntity.insert({
             fecha: consumo.fecha, //"2022-11-30"
             consumo: consumo.consumo,
-            id_cliente: consumo.id_cliente    
+            id_cliente: consumo.id_cliente
         });
 
     }
@@ -36,7 +35,7 @@ export class ConsumoService {
 
     //Registro de mas y menos consumo de Kw
     async getBordes() {
-        let borde:string = "";
+        let borde: string = "";
 
         const primero = await this.consumoEntity.find({
             order: {
@@ -63,11 +62,11 @@ export class ConsumoService {
         const clientePrimero = await this.clienteService.clienteUnico(primero[0].id_cliente)
         const clienteUltimo = await this.clienteService.clienteUnico(ultimo[0].id_cliente)
 
-        return borde = "El cliente que consumio mas Kw es: " + clientePrimero.nombre + 
+        return borde = "El cliente que consumio mas Kw es: " + clientePrimero.nombre +
             ". \nLa ID del cliente que consumio menos Kw es: " + clienteUltimo.nombre + ".";
     }
 
-    async reporteUsuario(param : number){
+    async reporteUsuario(param: number) {
         const lista = await this.consumoEntity.find({
             where: {
                 id_cliente: param
@@ -79,15 +78,25 @@ export class ConsumoService {
         return lista;
     }
 
-    async consumoUnico(param : number){
+    async consumoUnico(param: number) {
         const lista = await this.consumoEntity.find({
             where: {
-                id : param
+                id: param
             }
         })
 
         //console.log(lista)
 
         return lista[0];
+    }
+
+    async pagados() {
+        const users = await this.consumoEntity.query('SELECT pago.id AS "pagoid", consumo.id, id_cliente FROM `consumo` INNER JOIN `pago` ON `consumo`.`id` = `pago`.`id_consumo` ORDER BY `consumo`.`id_cliente` ASC')
+        return users;
+    }
+
+    async nopagados() {
+        const users = await this.consumoEntity.query('SELECT consumo.id_cliente, consumo.id FROM `pago` RIGHT JOIN `consumo` ON `consumo`.`id` = `pago`.`id_consumo` WHERE pago.id IS NULL ORDER BY consumo.id_cliente ASC')
+        return users;
     }
 }

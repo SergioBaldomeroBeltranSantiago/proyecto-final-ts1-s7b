@@ -25,13 +25,13 @@ export class PagoController {
     //Reporte de clientes que ya pagaron
     @Get('/clientesPagados')
     pagados() {
-        this.pagoService.pagados()
+        return this.pagoService.pagados()
     }
 
     //Reporte de clientes que aun no han pagado
     @Get('/clientesDeuda')
     pendientes() {
-        this.pagoService.deuda()
+        return this.pagoService.deuda()
     }
 
 }
