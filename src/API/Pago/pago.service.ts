@@ -102,15 +102,15 @@ export class PagoService {
 
   async pagados() {
 
-      //console.log(await this.consumoService.pagados())
+    //console.log(await this.consumoService.pagados())
 
 
     const pagadores = await this.consumoService.pagados()
 
-    let listaPagados : string = "";
+    let listaPagados: string = "";
 
     for (let index = 0; index < pagadores.length; index++) {
-      listaPagados += (" ID de cliente: " + pagadores[index].id_cliente + ", con ID de consumo: " + pagadores[index].id + " e ID de pago: " + pagadores[index].pagoid + ". \n");
+      listaPagados += (" ID de cliente: " + pagadores[index].id_cliente + ", Nombre del cliente: " + (await this.clienteService.clienteUnico(pagadores[index].id_cliente)).nombre + ", con ID de consumo: " + pagadores[index].id + " e ID de pago: " + pagadores[index].pagoid + ". \n");
     }
     return listaPagados
 
@@ -130,10 +130,10 @@ export class PagoService {
 
     const deudores = await this.consumoService.nopagados().finally()
 
-    let listaDeudores : string = "";
+    let listaDeudores: string = "";
 
     for (let index = 0; index < deudores.length; index++) {
-      listaDeudores += (" ID de cliente: " + deudores[index].id_cliente + ", con ID de consumo: " + deudores[index].id + ". \n");
+      listaDeudores += (" ID de cliente: " + deudores[index].id_cliente + ", Nombre del cliente: " + (await this.clienteService.clienteUnico(deudores[index].id_cliente)).nombre + ", con ID de consumo: " + deudores[index].id + ". \n");
     }
     return listaDeudores
 

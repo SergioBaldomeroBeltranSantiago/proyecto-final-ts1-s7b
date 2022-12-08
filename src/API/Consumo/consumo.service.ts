@@ -30,7 +30,11 @@ export class ConsumoService {
     }
 
     async getAll() {
-        return await this.consumoEntity.find();
+        return await this.consumoEntity.find({
+            relations:{
+                cliente: true
+            }
+        });
     }
 
     //Registro de mas y menos consumo de Kw
@@ -62,8 +66,8 @@ export class ConsumoService {
         const clientePrimero = await this.clienteService.clienteUnico(primero[0].id_cliente)
         const clienteUltimo = await this.clienteService.clienteUnico(ultimo[0].id_cliente)
 
-        return borde = "El cliente que consumio mas Kw es: " + clientePrimero.nombre +
-            ". \nLa ID del cliente que consumio menos Kw es: " + clienteUltimo.nombre + ".";
+        return borde = "El cliente que consumio menos Kw es \"" + clientePrimero.nombre + "\" con un total de "+ primero[0].consumo + "Kw"+
+            ". \nEl cliente que consumio mas Kw es \"" + clienteUltimo.nombre + "\" con un total de "+ ultimo[0].consumo + "Kw.";
     }
 
     async reporteUsuario(param: number) {
