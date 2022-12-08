@@ -4,16 +4,16 @@ services:
     build:
       context: .
       target: development
-    volumes:
+    volumes: 
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    ports: 
+    ports:
       - 3001:3000
     command: npm run start:docker
     env_file:
       - .env
     networks:
-      - webnet
+      - webnet 
   db:
     image: mysql
     restart: always
