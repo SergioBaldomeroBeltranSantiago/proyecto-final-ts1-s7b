@@ -71,7 +71,7 @@ export class ConsumoService {
     }
 
     async reporteUsuario(param: number) {
-        const lista = await this.consumoEntity.find({
+        const consumos = await this.consumoEntity.find({
             where: {
                 id_cliente: param
             }
@@ -79,7 +79,9 @@ export class ConsumoService {
 
         //console.log(lista)
 
-        return lista;
+        const usuario = await this.clienteService.clienteUnico(param);
+
+        return {usuario, consumos};
     }
 
     async consumoUnico(param: number) {

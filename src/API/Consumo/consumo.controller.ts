@@ -1,7 +1,6 @@
 import { IConsumo } from './../../Model/Consumo';
 import { Controller, Post, Body, Get, Param } from '@nestjs/common';
 import { ConsumoService } from './consumo.service';
-import { ClienteService } from '../Cliente/cliente.service';
 
 @Controller('consumo')
 export class ConsumoController {
